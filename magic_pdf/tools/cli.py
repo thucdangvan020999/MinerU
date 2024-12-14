@@ -71,6 +71,7 @@ without method specified, auto will be used by default.""",
     help='The starting page for PDF parsing, beginning from 0.',
     default=0,
 )
+
 @click.option(
     '-e',
     '--end',
@@ -79,7 +80,26 @@ without method specified, auto will be used by default.""",
     help='The ending page for PDF parsing, beginning from 0.',
     default=None,
 )
-def cli(path, output_dir, method, lang, debug_able, start_page_id, end_page_id):
+
+@click.option(
+    '-f',
+    '--formula',
+    'formula_able',
+    type=bool,
+    help='Enables detecting formula and converting to markdown',
+    default=False,
+)
+
+@click.option(
+    '-t',
+    '--table',
+    'table_able',
+    type=bool,
+    help='Enables detecting table and converting to markdown',
+    default=False,
+)
+
+def cli(path, output_dir, method, lang, debug_able, start_page_id, end_page_id, formula_able, table_able):
     model_config.__use_inside_model__ = True
     model_config.__model_mode__ = 'full'
     os.makedirs(output_dir, exist_ok=True)
@@ -101,7 +121,9 @@ def cli(path, output_dir, method, lang, debug_able, start_page_id, end_page_id):
                 debug_able,
                 start_page_id=start_page_id,
                 end_page_id=end_page_id,
-                lang=lang
+                lang=lang,
+                formula_enable=formula_able,
+                table_enable=table_able,
             )
 
         except Exception as e:
